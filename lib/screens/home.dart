@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:async';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,10 +14,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final List<String> imgList = [
-    'assets/images/img1.png',
-    'assets/images/img2.png',
-    'assets/images/img3.png',
-    'assets/images/img4.png',
+    'assets/imgs/img1.png',
+    'assets/imgs/img2.png',
+    'assets/imgs/img3.png',
+    'assets/imgs/img4.png',
   ];
 
   @override
@@ -26,7 +27,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -42,8 +43,8 @@ class _HomeState extends State<Home> {
                         SizedBox(width: 10),
                         SvgPicture.asset(
                           'assets/imgs/search.svg',
-                          width: 28,
-                          height: 28,
+                          width: 25,
+                          height: 25,
                         ),
                         SizedBox(width: 10),
                         Expanded(
@@ -72,12 +73,12 @@ class _HomeState extends State<Home> {
                     border: Border.all(color: Colors.black),
                   ),
                   child: CircleAvatar(
-                    radius: 25,
+                    radius: 23,
                     backgroundColor: Colors.transparent,
                     child: SvgPicture.asset(
-                      'assets/icons/bell.svg',
-                      width: 24,
-                      height: 24,
+                      'assets/imgs/bell.svg',
+                      width: 22,
+                      height: 22,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -102,8 +103,94 @@ class _HomeState extends State<Home> {
                     ))
                 .toList(),
           ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Deals of the Day section
+                Row(
+                  children: [
+                    Text(
+                      'Deals of the Day',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                        width: 8), // Spacing between text and timer container
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.access_time,
+                            color: Colors.white,
+                            size: 14,
+                          ),
+                          SizedBox(width: 8),
+                          CountdownTimer(), // Countdown Timer Widget
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                // "View All" text
+                Text(
+                  'View All',
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+// Countdown Timer Widget
+class CountdownTimer extends StatefulWidget {
+  @override
+  _CountdownTimerState createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends State<CountdownTimer> {
+  late Timer _timer;
+  int _start = 24 * 60 * 60; // 24 hours in seconds
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_start > 0) {
+        setState(() {
+          _start--;
+        });
+      } else {
+        _timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int hours = (_start ~/ 3600);
+    int minutes = (_start % 3600) ~/ 60;
+    int seconds = _start % 60;
+
+    return Text(
+      '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+      style: TextStyle(color: Colors.white, fontSize: 14),
     );
   }
 }
