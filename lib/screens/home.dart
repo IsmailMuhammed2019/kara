@@ -20,6 +20,8 @@ class _HomeState extends State<Home> {
     'assets/imgs/img4.png',
   ];
 
+  int _currentIndex = 0; // Variable to track the current index
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +94,11 @@ class _HomeState extends State<Home> {
               autoPlay: true,
               enlargeCenterPage: true,
               aspectRatio: 16 / 9,
-              onPageChanged: (index, reason) {},
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index; // Update current index
+                });
+              },
             ),
             items: imgList
                 .map((item) => Container(
@@ -103,8 +109,26 @@ class _HomeState extends State<Home> {
                     ))
                 .toList(),
           ),
+          // Indicator Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: imgList.asMap().entries.map((entry) {
+              int index = entry.key;
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 4.0),
+                width: 8.0,
+                height: 8.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentIndex == index
+                      ? Colors.red
+                      : Colors.grey, // Active indicator color
+                ),
+              );
+            }).toList(),
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 25, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
