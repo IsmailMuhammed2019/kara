@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
+            padding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -76,8 +76,8 @@ class _HomeState extends State<Home> {
                     backgroundColor: Colors.transparent,
                     child: SvgPicture.asset(
                       'assets/icons/bell.svg',
-                      width: 22,
-                      height: 22,
+                      width: 24,
+                      height: 24,
                       fit: BoxFit.contain,
                     ),
                   ),
