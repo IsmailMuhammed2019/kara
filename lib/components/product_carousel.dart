@@ -15,7 +15,7 @@ class ProductCarousel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: CarouselSlider(
         options: CarouselOptions(
-          height: 220,
+          height: 200,
           autoPlay: true,
           autoPlayInterval: const Duration(seconds: 5), // Slower sliding
           enlargeCenterPage: true,
