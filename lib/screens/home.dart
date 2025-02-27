@@ -1,9 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+// lib/screens/home.dart
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:async';
+import '../components/search_bar.dart';
+import '../components/image_carousel.dart';
+import '../components/product_carousel.dart';
+import '../components/countdown_timer.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,6 +20,13 @@ class _HomeState extends State<Home> {
     'assets/imgs/img4.png',
   ];
 
+  final List<String> productList = [
+    'assets/imgs/product1.png',
+    'assets/imgs/product2.png',
+    'assets/imgs/product3.png',
+    'assets/imgs/product4.png',
+  ];
+
   int _currentIndex = 0; // Variable to track the current index
 
   @override
@@ -28,111 +35,20 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey.shade200,
       body: Column(
         children: [
+          TopSearchBar(),
+          ImageCarousel(
+            imgList: imgList,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.black),
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 10),
-                        SvgPicture.asset(
-                          'assets/imgs/search.svg',
-                          width: 25,
-                          height: 25,
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            style: TextStyle(fontSize: 16),
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              hintStyle: TextStyle(
-                                  color: Colors
-                                      .grey), // Optional: Style for hint text
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10), // Center text vertically
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black),
-                  ),
-                  child: CircleAvatar(
-                    radius: 23,
-                    backgroundColor: Colors.transparent,
-                    child: SvgPicture.asset(
-                      'assets/imgs/bell.svg',
-                      width: 22,
-                      height: 22,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          CarouselSlider(
-            options: CarouselOptions(
-              height: 200,
-              autoPlay: true,
-              enlargeCenterPage: true,
-              aspectRatio: 16 / 9,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _currentIndex = index; // Update current index
-                });
-              },
-            ),
-            items: imgList
-                .map((item) => Container(
-                      child: Center(
-                        child:
-                            Image.asset(item, fit: BoxFit.cover, width: 1000),
-                      ),
-                    ))
-                .toList(),
-          ),
-          // Indicator Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: imgList.asMap().entries.map((entry) {
-              int index = entry.key;
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 4.0),
-                width: 8.0,
-                height: 8.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _currentIndex == index
-                      ? Colors.red
-                      : Colors.grey, // Active indicator color
-                ),
-              );
-            }).toList(),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 25, 16, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Deals of the Day section
                 Row(
                   children: [
                     Text(
@@ -140,8 +56,7 @@ class _HomeState extends State<Home> {
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
-                        width: 8), // Spacing between text and timer container
+                    SizedBox(width: 8),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.black,
@@ -162,7 +77,6 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                // "View All" text
                 Text(
                   'View All',
                   style: TextStyle(color: Colors.black, fontSize: 16),
@@ -170,51 +84,17 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+          ProductCarousel(
+            productList: productList,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex =
+                    index; // Update current index for products if needed
+              });
+            },
+          ),
         ],
       ),
-    );
-  }
-}
-
-// Countdown Timer Widget
-class CountdownTimer extends StatefulWidget {
-  @override
-  _CountdownTimerState createState() => _CountdownTimerState();
-}
-
-class _CountdownTimerState extends State<CountdownTimer> {
-  late Timer _timer;
-  int _start = 24 * 60 * 60; // 24 hours in seconds
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_start > 0) {
-        setState(() {
-          _start--;
-        });
-      } else {
-        _timer.cancel();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    int hours = (_start ~/ 3600);
-    int minutes = (_start % 3600) ~/ 60;
-    int seconds = _start % 60;
-
-    return Text(
-      '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-      style: TextStyle(color: Colors.white, fontSize: 14),
     );
   }
 }
