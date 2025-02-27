@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class ImageCarousel extends StatelessWidget {
+class ImageCarousel extends StatefulWidget {
   final List<String> imgList;
   final Function(int) onPageChanged;
 
-  const ImageCarousel(
-      {Key? key, required this.imgList, required this.onPageChanged})
-      : super(key: key);
+  const ImageCarousel({
+    Key? key,
+    required this.imgList,
+    required this.onPageChanged,
+  }) : super(key: key);
+
+  @override
+  _ImageCarouselState createState() => _ImageCarouselState();
+}
+
+class _ImageCarouselState extends State<ImageCarousel> {
+  int _currentIndex = 0; // Declare current index
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +28,14 @@ class ImageCarousel extends StatelessWidget {
             autoPlay: true,
             enlargeCenterPage: true,
             aspectRatio: 16 / 9,
-            onPageChanged: (index, reason) => onPageChanged(index),
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentIndex = index; // Update current index
+              });
+              widget.onPageChanged(index); // Call the passed function
+            },
           ),
-          items: imgList
+          items: widget.imgList
               .map((item) => Container(
                     child: Center(
                       child: Image.asset(item, fit: BoxFit.cover, width: 1000),
@@ -32,15 +46,17 @@ class ImageCarousel extends StatelessWidget {
         // Indicator Row for Image Carousel
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: imgList.asMap().entries.map((entry) {
+          children: widget.imgList.asMap().entries.map((entry) {
             int index = entry.key;
             return Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
+              margin: EdgeInsets.symmetric(horizontal: 8.0),
               width: 8.0,
               height: 8.0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.black, // Active indicator color
+                color: _currentIndex == index
+                    ? Colors.red
+                    : Colors.black, // Change color based on active index
               ),
             );
           }).toList(),
