@@ -15,7 +15,7 @@ class ProductCarousel extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: CarouselSlider(
         options: CarouselOptions(
-          height: 200,
+          height: 220,
           autoPlay: true,
           autoPlayInterval: const Duration(seconds: 5), // Slower sliding
           enlargeCenterPage: true,
@@ -25,7 +25,7 @@ class ProductCarousel extends StatelessWidget {
         ),
         items: productList
             .map((product) => Container(
-                  width: 150, // Set a specific width for the product container
+                  width: 170, // Set a specific width for the product container
                   margin: const EdgeInsets.symmetric(
                       horizontal: 2), // Reduced margin
                   decoration: BoxDecoration(
@@ -55,7 +55,7 @@ class ProductCarousel extends StatelessWidget {
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Text(
+                          child: const Text(
                             '10% off',
                             style: TextStyle(
                               color: Colors.white,
@@ -80,16 +80,16 @@ class ProductCarousel extends StatelessWidget {
                           style: TextStyle(fontSize: 14), // Smaller font size
                         ),
                         // Row for prices
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               '\$99.99', // Actual product price
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold), // Bolder price
                             ),
-                            const Text(
+                            Text(
                               '\$109.99', // Canceled price
                               style: TextStyle(
                                   fontSize: 14,
